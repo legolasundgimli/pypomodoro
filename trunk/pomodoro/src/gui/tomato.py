@@ -11,11 +11,16 @@ import img
 import os
 from conf import settings
 from conf import messages
+from data import task
 
 
 ID_RESET=101
 ID_EXIT=102
 #ID_START=
+ID_NEW_TASK=201
+ID_VIEW_TASK=202
+ID_SAVE_TASK=203
+ID_SEND_TASKS=204
 
 class Tomato(wx.Frame):
     
@@ -23,6 +28,7 @@ class Tomato(wx.Frame):
         
         self.maxtime=settings.MAX_TIME*60
         self.count = 0
+        self.taskname=''
         wx.Frame.__init__(self, parent, id, title, size=(250, 150))
                 
         self.timer = wx.Timer(self, 1)
@@ -61,12 +67,18 @@ class Tomato(wx.Frame):
         panel.SetSizer(vbox)
         self.Centre()
         
-        self.__menu__()                
+        self.__menu__()  
+        
+        # Task list:
+        self.tasklist=task.MyTaskList()
+                      
         self.Show(True)
 
     def OnOk(self, event):
         if self.count >= self.maxtime:
-            return
+            return        
+        # Create a new task
+        self.tasklist.append(self.taskname)
         self.timer.Start(1000)        
 
     def OnStop(self, event):
@@ -76,15 +88,17 @@ class Tomato(wx.Frame):
         self.text.SetLabel(messages.TASK_INTERRUPTED)
         wx.Bell()
 
-    def OnTimer(self, event):
-        self.count = self.count +1
+    def OnTimer(self, event):        
+        self.count += 1
         self.gauge.SetValue(self.count)
         self.text.SetLabel(messages.TASK_INPROGRESS %(self.count/60, self.count%60))
         self.SetTitle('%s (%d)' %(settings.TITLE, (settings.MAX_TIME - self.count/60)))        
-        if self.count == self.maxtime:
+        if self.count == self.maxtime:            
             self.timer.Stop()
             self.text.SetLabel(messages.TASK_COMPLETED)
             self.SetTitle(messages.TASK_COMPLETED)
+            self.count=0
+            self.tasklist.current.stop()
             
     def OnReset(self, event):
         self.count=0
@@ -95,6 +109,20 @@ class Tomato(wx.Frame):
     def OnExit(self, event):
         self.Close(True)  # Close the frame.
     
+    def OnTextEntry(self, event):
+        dlg = wx.TextEntryDialog(self, 'Working one ?','Task Name')
+        dlg.SetValue('')
+        if dlg.ShowModal() == wx.ID_OK:
+            self.SetStatusText('You entered: %s\n' % dlg.GetValue())
+            self.taskname=dlg.GetValue()
+            if self.tasklist.current != None:
+                self.tasklist.current.name=self.taskname
+        dlg.Destroy()
+    
+    def OnShowTaskDialog(self, event):
+        dlg=TaskDialog(self, -1, 'Task', self.tasklist.list)        
+        dlg.ShowModal()
+        dlg.Destroy()
         
     def __menu__(self):                    
         # Menu
@@ -104,7 +132,65 @@ class Tomato(wx.Frame):
         # Creating the menubar.
         menuBar = wx.MenuBar()
         menuBar.Append(resetmenu,"&Menu") # Adding the "resetmenu" to the MenuBar
+        
+        # Task
+        taskmenu=wx.Menu()
+        taskmenu.Append(ID_NEW_TASK, '&Add', 'Add a new task.' )
+        taskmenu.Append(ID_VIEW_TASK, '&View', 'View All tasks' )
+        taskmenu.Append(ID_SAVE_TASK, '&Save', 'Save all task' )
+        taskmenu.Append(ID_SEND_TASKS, 'S&end', 'Send all task' )
+        menuBar.Append(taskmenu,"&Task")
+        
         self.SetMenuBar(menuBar)  # Adding the MenuBar to the Frame content.        
         wx.EVT_MENU(self, ID_RESET, self.OnReset)       # attach the menu-event ID_RESET to the
         wx.EVT_MENU(self, ID_EXIT, self.OnExit)       # attach the menu-event ID_EXIT to the
+        
+        wx.EVT_MENU(self, ID_NEW_TASK, self.OnTextEntry)
+        wx.EVT_MENU(self, ID_VIEW_TASK, self.OnShowTaskDialog)
 
+
+class TaskDialog(wx.Dialog):
+    
+    def __init__(self, parent, id, title, tasklist):
+        wx.Dialog.__init__(self, parent, id, title, size=(500,200), style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)    
+        # sizer =  self.CreateTextSizer('Tasks')
+        sizer=wx.BoxSizer(wx.HORIZONTAL)
+        sheet=TaskSheet(self, tasklist)        
+        sizer.Add(sheet, 0, wx.ALL, 1)        
+        self.SetSizer(sizer)
+    
+
+from wx.lib import sheet
+
+class TaskSheet(sheet.CSheet):
+    
+    def __init__(self, parent, tasklist):
+        sheet.CSheet.__init__(self, parent)
+        self.row = self.col = 0
+        self.tasklis=tasklist        
+        self.SetNumberRows(len(tasklist)+1)
+        self.SetNumberCols(3)
+                        
+        #Columns name:
+        self.SetColLabelValue(0, 'Task')
+        self.SetColLabelValue(1, 'Start')
+        self.SetColLabelValue(2, 'Stop')        
+        
+        self.loadTask()
+        
+    def loadTask(self):
+        
+                
+        row=0                
+        for item in self.tasklis:
+            self.SetCellValue(row, 0, item.name)
+            self.SetColSize(0, len(item.name.ljust(20))*8)            
+            self.SetCellValue(row, 1, item.startAt())
+            self.SetColSize(1, len(item.startAt())*8)            
+            if item.ended():
+                self.SetCellValue(row, 2, item.stopAt())
+                self.SetColSize(2, len(item.stopAt())*10)
+            else:
+                self.SetCellValue(row, 2, 'Running')
+            row+=1            
+        
