@@ -45,6 +45,7 @@ class MyTask():
             return True
         return False
     
+    
 class MyTaskList():
     
     def __init__(self):
@@ -63,4 +64,25 @@ class MyTaskList():
         return self.current    
         
         
+from conf import settings
+    
+SEPARATOR=settings.CSV_SEPARATOR
+    
+def csvformat( _task):
+    ret=''
+    if _task!= None and isinstance(_task, MyTask):
+        ret+=_task.name
+        ret+=SEPARATOR
+        ret+=_task.startAt()
+        ret+=SEPARATOR
+        if _task.ended():
+            ret+=_task.stopAt()
+        else:
+            ret+='running'
+        ret+=SEPARATOR        
+    elif _task != None and isinstance(_task, MyTaskList):
+        for item in _task.list:
+            ret+=csvformat(item)
+            ret+='\n'                            
+    return ret
     
