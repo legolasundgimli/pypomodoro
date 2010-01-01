@@ -9,3 +9,9 @@ MAX_TIME=25
 TITLE='Tomato'
 
 ICON='ico.ico'
+
+CSV_SEPARATOR=','
+
+import os
+homedir = os.getenv("HOME")
+CVS_FILE='homedir/.pomodoro/mytask.csv'
