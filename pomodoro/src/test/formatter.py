@@ -16,7 +16,7 @@ class TestFormatter(unittest.TestCase):
         mytask.start()
         time.sleep(2)
         mytask.stop()
-        out=task.csvformat(mytask)
+        out=task.csvTaskFormatter(mytask)
         print out
         self.assertTrue(out.find('my task')>-1)
         
@@ -26,7 +26,7 @@ class TestFormatter(unittest.TestCase):
         mytaskList.current.stop()
         mytaskList.append('task 2')
         mytaskList.current.stop()        
-        out=task.csvformat(mytaskList)
+        out=task.csvTaskFormatter(mytaskList)
         print out
         self.assertTrue(((out.find('task 1')>-1) and (out.find('task 2')>-1)))
 
