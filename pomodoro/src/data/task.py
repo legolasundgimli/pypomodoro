@@ -22,7 +22,7 @@ class MyTask():
         self._stopAt=None
         self.saved=False
         
-    def start(self):        
+    def restart(self):        
         self._startAt=datetime.datetime.utcnow()
         return self._startAt
     
@@ -69,7 +69,7 @@ from conf import settings
     
 SEPARATOR=settings.CSV_SEPARATOR
     
-def csvformat( _task):
+def csvTaskFormatter( _task):
     ret=''
     if _task!= None and isinstance(_task, MyTask):
         ret+=_task.name
