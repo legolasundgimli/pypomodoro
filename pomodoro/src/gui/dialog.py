@@ -1,16 +1,20 @@
-Created on Dec Jan, 2010
+'''
+ Created on Dec Jan, 2010
 
 @author: uolter
+'''
 
+import wx
 
 class TaskDialog(wx.Dialog):
     
     def __init__(self, parent, id, title, tasklist):
         wx.Dialog.__init__(self, parent, id, title, size=(500,200), style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)    
         # sizer =  self.CreateTextSizer('Tasks')
-        sizer=wx.BoxSizer(wx.HORIZONTAL)
+        sizer=wx.BoxSizer(wx.VERTICAL)
         sheet=TaskSheet(self, tasklist)        
-        sizer.Add(sheet, 0, wx.ALL, 1)        
+        sizer.Add(sheet, 0, wx.EXPAND | wx.ALL, 20)
+                
         self.SetSizer(sizer)
     
 
