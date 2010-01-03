@@ -10,7 +10,7 @@ import os
 from conf import settings
 from conf import messages
 from data import task
-from gui import diaog
+from gui import dialog
 
 ID_RESET=101
 ID_EXIT=102
