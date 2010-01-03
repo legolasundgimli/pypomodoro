@@ -14,4 +14,4 @@ CSV_SEPARATOR=','
 
 import os
 homedir = os.getenv("HOME")
-CVS_FILE='homedir/.pomodoro/mytask.csv'
+CVS_FILE= homedir + '/.pomodoro/mytask.csv'
