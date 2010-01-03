@@ -4,15 +4,13 @@ Created on Dec 10, 2009
 @author: uolter
 '''
 
-# gauge.py
-
 import wx
 import img
 import os
 from conf import settings
 from conf import messages
 from data import task
-
+from gui import diaog
 
 ID_RESET=101
 ID_EXIT=102
@@ -120,7 +118,7 @@ class Tomato(wx.Frame):
         dlg.Destroy()
     
     def OnShowTaskDialog(self, event):
-        dlg=TaskDialog(self, -1, 'Task', self.tasklist.list)        
+        dlg=dialog.TaskDialog(self, -1, 'Task', self.tasklist.list)        
         dlg.ShowModal()
         dlg.Destroy()
         
@@ -147,50 +145,3 @@ class Tomato(wx.Frame):
         
         wx.EVT_MENU(self, ID_NEW_TASK, self.OnTextEntry)
         wx.EVT_MENU(self, ID_VIEW_TASK, self.OnShowTaskDialog)
-
-
-class TaskDialog(wx.Dialog):
-    
-    def __init__(self, parent, id, title, tasklist):
-        wx.Dialog.__init__(self, parent, id, title, size=(500,200), style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)    
-        # sizer =  self.CreateTextSizer('Tasks')
-        sizer=wx.BoxSizer(wx.HORIZONTAL)
-        sheet=TaskSheet(self, tasklist)        
-        sizer.Add(sheet, 0, wx.ALL, 1)        
-        self.SetSizer(sizer)
-    
-
-from wx.lib import sheet
-
-class TaskSheet(sheet.CSheet):
-    
-    def __init__(self, parent, tasklist):
-        sheet.CSheet.__init__(self, parent)
-        self.row = self.col = 0
-        self.tasklis=tasklist        
-        self.SetNumberRows(len(tasklist)+1)
-        self.SetNumberCols(3)
-                        
-        #Columns name:
-        self.SetColLabelValue(0, 'Task')
-        self.SetColLabelValue(1, 'Start')
-        self.SetColLabelValue(2, 'Stop')        
-        
-        self.loadTask()
-        
-    def loadTask(self):
-        
-                
-        row=0                
-        for item in self.tasklis:
-            self.SetCellValue(row, 0, item.name)
-            self.SetColSize(0, len(item.name.ljust(20))*8)            
-            self.SetCellValue(row, 1, item.startAt())
-            self.SetColSize(1, len(item.startAt())*8)            
-            if item.ended():
-                self.SetCellValue(row, 2, item.stopAt())
-                self.SetColSize(2, len(item.stopAt())*10)
-            else:
-                self.SetCellValue(row, 2, 'Running')
-            row+=1            
-        

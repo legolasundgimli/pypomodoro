@@ -16,10 +16,11 @@ class MyTask():
     
     __timeformat__='%m/%d/%Y %I:%M%p'
     
-    def __init__(self, name=''):        
-        self.start()
+    def __init__(self, name=''):
         self.name=name
-        self._stopAt=None        
+        self._startAt=datetime.datetime.utcnow()                
+        self._stopAt=None
+        self.saved=False
         
     def start(self):        
         self._startAt=datetime.datetime.utcnow()
