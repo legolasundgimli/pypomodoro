@@ -24,8 +24,8 @@ class CSVTask():
             fout.write(str)
             fout.close()
             return True
-        except IOError as (errno, strerror):
-            print "Error wrting file %s {0}: {1}".format(errno, strerror) %self.filename
+        except IOError, ex:
+            print '%s' %(ex)            
             return False
         
     def reset(self):
