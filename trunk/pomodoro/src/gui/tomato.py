@@ -9,7 +9,7 @@ import img
 import os
 from conf import settings
 from conf import messages
-from data import task
+from data import task, file
 from gui import dialog
 
 ID_RESET=101
@@ -122,6 +122,12 @@ class Tomato(wx.Frame):
         dlg.ShowModal()
         dlg.Destroy()
         
+    def OnSave(self, event):
+        csvtask=file.CSVTask()
+        if self.tasklist != None:
+            csvtask.write(task.csvTaskFormatter(self.tasklist))
+            
+        
     def __menu__(self):                    
         # Menu
         resetmenu= wx.Menu()
@@ -145,3 +151,4 @@ class Tomato(wx.Frame):
         
         wx.EVT_MENU(self, ID_NEW_TASK, self.OnTextEntry)
         wx.EVT_MENU(self, ID_VIEW_TASK, self.OnShowTaskDialog)
+        wx.EVT_MENU(self, ID_SAVE_TASK, self.OnSave)
