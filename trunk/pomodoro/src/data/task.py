@@ -19,8 +19,7 @@ class MyTask():
     def __init__(self, name=''):
         self.name=name
         self._startAt=datetime.datetime.utcnow()                
-        self._stopAt=None
-        self.saved=False
+        self._stopAt=None        
         
     def restart(self):        
         self._startAt=datetime.datetime.utcnow()
@@ -71,7 +70,7 @@ SEPARATOR=settings.CSV_SEPARATOR
     
 def csvTaskFormatter( _task):
     ret=''
-    if _task!= None and isinstance(_task, MyTask):
+    if _task!= None and isinstance(_task, MyTask) and _task.ended:
         ret+=_task.name
         ret+=SEPARATOR
         ret+=_task.startAt()
@@ -83,7 +82,7 @@ def csvTaskFormatter( _task):
         ret+=SEPARATOR        
     elif _task != None and isinstance(_task, MyTaskList):
         for item in _task.list:
-            ret+=csvformat(item)
+            ret+=csvTaskFormatter(item)
             ret+='\n'                            
     return ret
     
