@@ -18,7 +18,7 @@ class CSVTask():
         else: 
             self.filename=filename
         
-    def write(self, str, mode=__APPEND__):
+    def write(self, str, mode=__WRITE__):
         try:
             fout = open(self.filename, mode)
             fout.write(str)
