@@ -10,6 +10,7 @@ import os
 from conf import settings
 from conf import messages
 from data import task, file
+
 from gui import dialog
 
 ID_RESET=101
@@ -45,7 +46,7 @@ class Tomato(wx.Frame):
         hbox3 = wx.BoxSizer(wx.HORIZONTAL)
 
         self.gauge = wx.Gauge(panel, -1, 25*60, size=(250, 25))
-        self.btn1 = wx.Button(panel, wx.ID_OK, 'Start')
+        self.btn1 = wx.Button(panel, wx.ID_OK, messages.BUTTON_START)
         self.btn2 = wx.Button(panel, wx.ID_STOP)
         self.text = wx.StaticText(panel, -1, messages.TASK_TOBE_DONE)
 
@@ -76,7 +77,8 @@ class Tomato(wx.Frame):
         if self.count >= self.maxtime:
             return        
         # Create a new task
-        self.tasklist.append(self.taskname)
+        if self.count == 0:
+            self.tasklist.append(self.taskname)
         self.timer.Start(1000)        
 
     def OnStop(self, event):
@@ -108,7 +110,7 @@ class Tomato(wx.Frame):
         self.Close(True)  # Close the frame.
     
     def OnTextEntry(self, event):
-        dlg = wx.TextEntryDialog(self, 'Working one ?','Task Name')
+        dlg = wx.TextEntryDialog(self, messages.DLG_TEXT_MESSAGE,messages.DLG_TEXT_TITLE)
         dlg.SetValue('')
         if dlg.ShowModal() == wx.ID_OK:
             self.SetStatusText('You entered: %s\n' % dlg.GetValue())
@@ -118,7 +120,7 @@ class Tomato(wx.Frame):
         dlg.Destroy()
     
     def OnShowTaskDialog(self, event):
-        dlg=dialog.TaskDialog(self, -1, 'Task', self.tasklist.list)        
+        dlg=dialog.TaskDialog(self, self.tasklist.list,  -1, "")        
         dlg.ShowModal()
         dlg.Destroy()
         
