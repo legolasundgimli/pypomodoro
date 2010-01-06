@@ -78,7 +78,10 @@ class Tomato(wx.Frame):
             return        
         # Create a new task
         if self.count == 0:
+            # Assign the task name            
+            self.OnTextEntry(event)
             self.tasklist.append(self.taskname)
+                        
         self.timer.Start(1000)        
 
     def OnStop(self, event):
@@ -111,16 +114,21 @@ class Tomato(wx.Frame):
     
     def OnTextEntry(self, event):
         dlg = wx.TextEntryDialog(self, messages.DLG_TEXT_MESSAGE,messages.DLG_TEXT_TITLE)
-        dlg.SetValue('')
+        dlg.SetValue(self.taskname)
+        
         if dlg.ShowModal() == wx.ID_OK:
             self.SetStatusText('You entered: %s\n' % dlg.GetValue())
-            self.taskname=dlg.GetValue()
-            if self.tasklist.current != None:
-                self.tasklist.current.name=self.taskname
+            if len(dlg.GetValue())>0:
+                self.taskname=dlg.GetValue()             
+                if self.tasklist.current != None:
+                    self.tasklist.current.name=self.taskname
+            else:
+                self.OnTextEntry(event)
+                            
         dlg.Destroy()
     
     def OnShowTaskDialog(self, event):
-        dlg=dialog.TaskDialog(self, self.tasklist.list,  -1, "")        
+        dlg=dialog.TaskDialog(self, -1, 'Task', self.tasklist.list)        
         dlg.ShowModal()
         dlg.Destroy()
         
@@ -141,7 +149,7 @@ class Tomato(wx.Frame):
         
         # Task
         taskmenu=wx.Menu()
-        taskmenu.Append(ID_NEW_TASK, '&Add', 'Add a new task.' )
+        taskmenu.Append(ID_NEW_TASK, '&Rename', 'Rename Currnet Task' )
         taskmenu.Append(ID_VIEW_TASK, '&View', 'View All tasks' )
         taskmenu.Append(ID_SAVE_TASK, '&Save', 'Save all task' )
         taskmenu.Append(ID_SEND_TASKS, 'S&end', 'Send all task' )
