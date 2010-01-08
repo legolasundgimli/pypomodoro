@@ -13,7 +13,7 @@ class TestFormatter(unittest.TestCase):
 
     def test_1_TaskCSV(self):
         mytask=task.MyTask('my task')
-        mytask.start()
+        mytask.restart()
         time.sleep(2)
         mytask.stop()
         out=task.csvTaskFormatter(mytask)
