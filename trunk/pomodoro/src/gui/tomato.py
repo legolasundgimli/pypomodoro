@@ -98,7 +98,7 @@ class Tomato(wx.Frame):
         self.count += 1
         self.gauge.SetValue(self.count)
         self.text.SetLabel(messages.TASK_INPROGRESS %(self.count/60, self.count%60))
-        self.SetTitle('%s (%d)' %(settings.TITLE, (settings.MAX_TIME - self.count/60)))        
+        self.SetTitle('%s (%d)' %(messages.TITLE, (settings.MAX_TIME - self.count/60)))        
         if self.count == self.maxtime:            
             self.timer.Stop()
             self.text.SetLabel(messages.TASK_COMPLETED)
@@ -114,7 +114,7 @@ class Tomato(wx.Frame):
         self.count=0
         self.gauge.SetValue(self.count)
         self.text.SetLabel(messages.TASK_TOBE_DONE)
-        self.SetTitle(settings.TITLE)
+        self.SetTitle(messages.TITLE)
     
     def OnExit(self, event):
         self.Close(True)  # Close the frame.
