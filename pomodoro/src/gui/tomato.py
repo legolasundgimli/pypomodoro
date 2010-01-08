@@ -28,7 +28,7 @@ class Tomato(wx.Frame):
         self.maxtime=settings.MAX_TIME*60
         self.count = 0
         self.taskname=''
-        wx.Frame.__init__(self, parent, id, title, size=(250, 150))
+        wx.Frame.__init__(self, parent, id, title, size=(250, 170))
                 
         self.timer = wx.Timer(self, 1)
         
@@ -45,7 +45,7 @@ class Tomato(wx.Frame):
         hbox2 = wx.BoxSizer(wx.HORIZONTAL)
         hbox3 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.gauge = wx.Gauge(panel, -1, 25*60, size=(250, 25))
+        self.gauge = wx.Gauge(panel, -1, 25*60, size=(250, 20))
         self.btn1 = wx.Button(panel, wx.ID_OK, messages.BUTTON_START)
         self.btn2 = wx.Button(panel, wx.ID_STOP)
         self.text = wx.StaticText(panel, -1, messages.TASK_TOBE_DONE)
@@ -64,6 +64,9 @@ class Tomato(wx.Frame):
         vbox.Add(hbox2, 1, wx.ALIGN_CENTRE)
                         
         panel.SetSizer(vbox)
+        
+        self.CreateStatusBar()
+        
         self.Centre()
         
         self.__menu__()  
@@ -102,6 +105,10 @@ class Tomato(wx.Frame):
             self.SetTitle(messages.TASK_COMPLETED)
             self.count=0
             self.tasklist.current.stop()
+            self.taskname=''            
+            wx.Bell()
+            wx.Bell()
+            wx.Bell()
             
     def OnReset(self, event):
         self.count=0
@@ -117,7 +124,7 @@ class Tomato(wx.Frame):
         dlg.SetValue(self.taskname)
         
         if dlg.ShowModal() == wx.ID_OK:
-            self.SetStatusText('You entered: %s\n' % dlg.GetValue())
+            #self.SetStatusText('You entered: %s\n' % dlg.GetValue())
             if len(dlg.GetValue())>0:
                 self.taskname=dlg.GetValue()             
                 if self.tasklist.current != None:
@@ -128,32 +135,37 @@ class Tomato(wx.Frame):
         dlg.Destroy()
     
     def OnShowTaskDialog(self, event):
-        dlg=dialog.TaskDialog(self, -1, 'Task', self.tasklist.list)        
+        dlg=dialog.TaskDialog(self, -1, messages.DLG_TASK_TITLE, self.tasklist.list)        
         dlg.ShowModal()
         dlg.Destroy()
         
     def OnSave(self, event):
         csvtask=file.CSVTask()
-        if self.tasklist != None:
-            csvtask.write(task.csvTaskFormatter(self.tasklist))
+        if self.tasklist != None:                                 
+            dialog = wx.FileDialog( None, style = wx.SAVE | wx.OVERWRITE_PROMPT)
+            if dialog.ShowModal() == wx.ID_OK:                
+                csvtask.filename = dialog.GetPath()
+                csvtask.write(task.csvTaskFormatter(self.tasklist))            
+            # Destroy the dialog
+            dialog.Destroy()
             
         
     def __menu__(self):                    
         # Menu
         resetmenu= wx.Menu()
-        resetmenu.Append(ID_RESET, "&Reset"," Reset Conut")                    
-        resetmenu.Append(ID_EXIT, "E&xit"," Exit Tomato")
+        resetmenu.Append(ID_RESET, messages.MENU_MENU_RESET, messages.MENU_MENU_RESET_MSG)                    
+        resetmenu.Append(ID_EXIT, messages.MENU_MENU_EXIT, messages.MENU_MENU_EXIT_MSG)
         # Creating the menubar.
         menuBar = wx.MenuBar()
-        menuBar.Append(resetmenu,"&Menu") # Adding the "resetmenu" to the MenuBar
+        menuBar.Append(resetmenu,messages.MENU_MENU) # Adding the "resetmenu" to the MenuBar
         
         # Task
         taskmenu=wx.Menu()
-        taskmenu.Append(ID_NEW_TASK, '&Rename', 'Rename Currnet Task' )
-        taskmenu.Append(ID_VIEW_TASK, '&View', 'View All tasks' )
-        taskmenu.Append(ID_SAVE_TASK, '&Save', 'Save all task' )
-        taskmenu.Append(ID_SEND_TASKS, 'S&end', 'Send all task' )
-        menuBar.Append(taskmenu,"&Task")
+        taskmenu.Append(ID_NEW_TASK, messages.MENU_TASK_RENAME, messages.MENU_TASK_RENAME_MSG)
+        taskmenu.Append(ID_VIEW_TASK, messages.MENU_TASK_VIEW, messages.MENU_TASK_VIEW_MSG )
+        taskmenu.Append(ID_SAVE_TASK, messages.MENU_TASK_SAVE, messages.MENU_TASK_SAVE_MSG)
+        taskmenu.Append(ID_SEND_TASKS, messages.MENU_TASK_SEND, messages.MENU_TASK_SEND_MSG )        
+        menuBar.Append(taskmenu,messages.MENU_TASK)
         
         self.SetMenuBar(menuBar)  # Adding the MenuBar to the Frame content.        
         wx.EVT_MENU(self, ID_RESET, self.OnReset)       # attach the menu-event ID_RESET to the
