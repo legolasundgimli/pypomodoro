@@ -6,12 +6,13 @@ Created on Jan 3, 2010
 import unittest
 from data import file
 
+FILE_TEST='test.csv'
 
 class TestCSV(unittest.TestCase):
-
+    
 
     def test_1_CSV(self):
-        csvfile=file.CSVTask()
+        csvfile=file.CSVTask(FILE_TEST)
         out=csvfile.reset()
         self.assertTrue(out)
         out=csvfile.write('my csv')
