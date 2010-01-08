@@ -4,19 +4,14 @@ Created on Jan 3, 2010
 @author: uolter
 '''
 
-from conf import settings 
-
 class CSVTask():
     
     __APPEND__='a'
     __WRITE__='w'
     
         
-    def __init__(self, filename=None):
-        if filename == None:        
-            self.filename=settings.CVS_FILE
-        else: 
-            self.filename=filename
+    def __init__(self, filename=None):        
+        self.filename=filename
         
     def write(self, str, mode=__WRITE__):
         try:
