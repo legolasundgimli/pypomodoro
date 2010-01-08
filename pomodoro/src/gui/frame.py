@@ -7,7 +7,6 @@ Created on Dec 10, 2009
 import wx
 
 import time
-from timer import countdown
 
 ID_ABOUT=101
 ID_EXIT=110
