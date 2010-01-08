@@ -4,6 +4,7 @@ Created on Dec 17, 2009
 @author: uolter
 '''
 
+TITLE='POMODORO'
 
 TASK_TOBE_DONE='Task to be done'
 TASK_INTERRUPTED='Task Interrupted'
