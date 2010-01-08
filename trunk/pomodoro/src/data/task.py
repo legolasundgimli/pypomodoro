@@ -3,8 +3,6 @@ Created on Dec 28, 2009
 
 @author: uolter
 '''
-
-import time
 import datetime
 
 class MyTask():
