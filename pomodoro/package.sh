@@ -1,1 +1,0 @@
-tar zcvf pyPomodoro.tgz --exclude=.svn **
