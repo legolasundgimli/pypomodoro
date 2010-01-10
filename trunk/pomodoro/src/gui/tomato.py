@@ -45,7 +45,7 @@ class Tomato(wx.Frame):
         hbox2 = wx.BoxSizer(wx.HORIZONTAL)
         hbox3 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.gauge = wx.Gauge(panel, -1, 25*60, size=(250, 20))
+        self.gauge = wx.Gauge(panel, -1, settings.MAX_TIME*60, size=(250, 20))
         self.btn1 = wx.Button(panel, wx.ID_OK, messages.BUTTON_START)
         self.btn2 = wx.Button(panel, wx.ID_STOP)
         self.text = wx.StaticText(panel, -1, messages.TASK_TOBE_DONE)
@@ -81,9 +81,9 @@ class Tomato(wx.Frame):
             return        
         # Create a new task
         if self.count == 0:
-            # Assign the task name            
-            self.OnTextEntry(event)
-            self.tasklist.append(self.taskname)
+            # Assign the task name 
+            self.tasklist.append(self.taskname)           
+            self.OnTextEntry(event)            
                         
         self.timer.Start(1000)        
 
