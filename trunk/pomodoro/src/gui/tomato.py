@@ -49,7 +49,9 @@ class Tomato(wx.Frame):
         self.btn1 = wx.Button(panel, wx.ID_OK, messages.BUTTON_START)
         self.btn2 = wx.Button(panel, wx.ID_STOP)
         self.text = wx.StaticText(panel, -1, messages.TASK_TOBE_DONE)
-
+        
+        
+        self.Bind(wx.EVT_CLOSE, self.OnExit, self)
         self.Bind(wx.EVT_BUTTON, self.OnOk, self.btn1)
         self.Bind(wx.EVT_BUTTON, self.OnStop, self.btn2)
 
@@ -73,6 +75,7 @@ class Tomato(wx.Frame):
         
         # Task list:
         self.tasklist=task.MyTaskList()
+        self.tosave=False
                       
         self.Show(True)
 
@@ -84,7 +87,8 @@ class Tomato(wx.Frame):
             # Assign the task name 
             self.tasklist.append(self.taskname)           
             self.OnTextEntry(event)            
-                        
+        
+        self.tosave=True
         self.timer.Start(1000)        
 
     def OnStop(self, event):
@@ -96,6 +100,7 @@ class Tomato(wx.Frame):
 
     def OnTimer(self, event):        
         self.count += 1
+        self.tosave=True
         self.gauge.SetValue(self.count)
         self.text.SetLabel(messages.TASK_INPROGRESS %(self.count/60, self.count%60))
         self.SetTitle('%s (%d)' %(messages.TITLE, (settings.MAX_TIME - self.count/60)))        
@@ -117,8 +122,13 @@ class Tomato(wx.Frame):
         self.SetTitle(messages.TITLE)
     
     def OnExit(self, event):
-        self.Close(True)  # Close the frame.
-    
+        if not self.tosave:
+            self.Destroy()
+        else:
+            dlg=wx.MessageDialog(self, messages.DLG_TASK_WIN_CLOSE, messages.TITLE, wx.YES | wx.NO | wx.ICON_EXCLAMATION)
+            if dlg.ShowModal() == wx.ID_YES:
+                self.Destroy()
+                        
     def OnTextEntry(self, event):
         dlg = wx.TextEntryDialog(self, messages.DLG_TEXT_MESSAGE,messages.DLG_TEXT_TITLE)
         dlg.SetValue(self.taskname)
@@ -129,6 +139,7 @@ class Tomato(wx.Frame):
                 self.taskname=dlg.GetValue()             
                 if self.tasklist.current != None:
                     self.tasklist.current.name=self.taskname
+                    self.tosave=True                    
             else:
                 self.OnTextEntry(event)
                             
@@ -145,7 +156,8 @@ class Tomato(wx.Frame):
             dialog = wx.FileDialog( None, style = wx.SAVE | wx.OVERWRITE_PROMPT)
             if dialog.ShowModal() == wx.ID_OK:                
                 csvtask.filename = dialog.GetPath()
-                csvtask.write(task.csvTaskFormatter(self.tasklist))            
+                csvtask.write(task.csvTaskFormatter(self.tasklist))
+                self.tosave=False            
             # Destroy the dialog
             dialog.Destroy()
             
