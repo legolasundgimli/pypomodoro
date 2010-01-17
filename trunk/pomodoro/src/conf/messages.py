@@ -41,3 +41,6 @@ DLG_TASK_GRID_COL1 = 'Start'
 DLG_TASK_GRID_COL2 = 'Stop'
 
 DLG_TASK_GRID_TASK_RUNNING = 'Running'
+
+#################################
+DLG_TASK_WIN_CLOSE='Tasks are not saved. Are you sure you want to exit?'
