@@ -12,7 +12,7 @@ class MyTask():
     
     #__timeformat__='%A, %d. %B %Y %I:%M%p'
     
-    __timeformat__='%m/%d/%Y %I:%M%p'
+    __timeformat__='%d/%m/%Y %I:%M%p'
     
     def __init__(self, name=''):
         self.name=name
