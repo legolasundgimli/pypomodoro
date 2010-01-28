@@ -3,6 +3,7 @@ Created on Dec 10, 2009
 
 @author: uolter
 '''
+from google.calendar import PostTask
 
 import wx
 import img
@@ -19,7 +20,7 @@ ID_EXIT=102
 ID_NEW_TASK=201
 ID_VIEW_TASK=202
 ID_SAVE_TASK=203
-ID_SEND_TASKS=204
+ID_SEND_TASK=204
 
 class Tomato(wx.Frame):
     
@@ -148,7 +149,16 @@ class Tomato(wx.Frame):
                 csvtask.write(task.csvTaskFormatter(self.tasklist))            
             # Destroy the dialog
             dialog.Destroy()
+    
+    def OnSent(self, event):       
+        dlg=dialog.LoginDialog(self)
+        user = dlg.GetUser()
+        if user != None:
+            post=PostTask(user)
+            i=post.send(self.tasklist.list)
+            self.SetStatusText('Sent %d tasks' %i)
             
+    
         
     def __menu__(self):                    
         # Menu
@@ -164,7 +174,7 @@ class Tomato(wx.Frame):
         taskmenu.Append(ID_NEW_TASK, messages.MENU_TASK_RENAME, messages.MENU_TASK_RENAME_MSG)
         taskmenu.Append(ID_VIEW_TASK, messages.MENU_TASK_VIEW, messages.MENU_TASK_VIEW_MSG )
         taskmenu.Append(ID_SAVE_TASK, messages.MENU_TASK_SAVE, messages.MENU_TASK_SAVE_MSG)
-        taskmenu.Append(ID_SEND_TASKS, messages.MENU_TASK_SEND, messages.MENU_TASK_SEND_MSG )        
+        taskmenu.Append(ID_SEND_TASK, messages.MENU_TASK_SEND, messages.MENU_TASK_SEND_MSG )        
         menuBar.Append(taskmenu,messages.MENU_TASK)
         
         self.SetMenuBar(menuBar)  # Adding the MenuBar to the Frame content.        
@@ -174,3 +184,4 @@ class Tomato(wx.Frame):
         wx.EVT_MENU(self, ID_NEW_TASK, self.OnTextEntry)
         wx.EVT_MENU(self, ID_VIEW_TASK, self.OnShowTaskDialog)
         wx.EVT_MENU(self, ID_SAVE_TASK, self.OnSave)
+        wx.EVT_MENU(self, ID_SEND_TASK, self.OnSent)
