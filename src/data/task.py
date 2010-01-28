@@ -17,7 +17,8 @@ class MyTask():
     def __init__(self, name=''):
         self.name=name
         self._startAt=datetime.datetime.utcnow()                
-        self._stopAt=None        
+        self._stopAt=None
+        self.sent=False        
         
     def restart(self):        
         self._startAt=datetime.datetime.utcnow()
