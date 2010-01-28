@@ -10,4 +10,4 @@ ICON='ico.ico'
 
 CSV_SEPARATOR=','
 
-
+google_calendar_account='wtraspad@yahoo.it'
