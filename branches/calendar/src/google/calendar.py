@@ -6,6 +6,8 @@ Created on Jan 24, 2010
 import gdata.calendar
 from gdata.calendar.service import CalendarService
 from gdata.calendar import CalendarEventEntry
+from threading import Thread
+import thread
 import time
 
 import atom
@@ -44,16 +46,14 @@ class EntryManager(gdata.calendar.CalendarEventEntry):
         else:
             return None
         
-class PostTask():
+class PostTask(Thread):
     
     def __init__(self, user):
-        self.user=user
-        print user
-        self.entry_manager=EntryManager(user[0], user[1])
-        
-    
-    def send(self, tasklist):
-        i=0
+        self.user=user        
+                    
+    def run(self, tasklist):
+        self.entry_manager=EntryManager(self.user[0], self.user[1])
+        i=0        
         for item in tasklist:
             if(item.ended() and not item.sent):
                 event=self.entry_manager.insert_single_event(item.name, item._startAt.timetuple(), item._stopAt.timetuple())
