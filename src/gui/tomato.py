@@ -77,7 +77,7 @@ class Tomato(wx.Frame):
         # Task list:
         self.tasklist=task.MyTaskList()
         self.tosave=False
-                      
+        self.username=settings.google_calendar_account                                   
         self.Show(True)
 
     def OnOk(self, event):
@@ -162,14 +162,22 @@ class Tomato(wx.Frame):
             # Destroy the dialog
             dialog.Destroy()
     
-    def OnSent(self, event):       
-        dlg=dialog.LoginDialog(self)
-        user = dlg.GetUser()
-        if user != None:
-            post=PostTask(user)
-            i=post.run(self.tasklist.list)
-            self.SetStatusText('Sent %d tasks' %i)
-            
+    def OnSent(self, event):
+        tasks=self.tasklist.task_to_send()
+        
+        if len(tasks)>0: 
+            self.SetStatusText(messages.TASK_SENDING %len(tasks))
+            dlg=dialog.LoginDialog(self)
+            user = dlg.GetUser()        
+            if user != None:
+                post=PostTask(user, tasks)
+                i=post.send()
+                settings.google_calendar_account=user[0]
+                if i!=len(tasks):
+                    self.SetStatusText(messages.ERROR_SENFING_TASK)
+                self.SetStatusText(messages.TASK_SENT %i)
+        else:
+            self.SetStatusText(messages.TASK_NONE)
     
         
     def __menu__(self):                    
