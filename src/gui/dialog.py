@@ -76,9 +76,11 @@ class TaskDialog(wx.Dialog):
 
 
 class LoginDialog(wx.Dialog):
+    
     def __init__(self, parent, id=-1, title="Login",
                  pos=wx.DefaultPosition,
                  size=wx.Size(400, 150)):
+        
         wx.Dialog.__init__(self, parent, id, title, pos, size)
         wx.StaticText(self, -1, 'Please type your user name and password.',
                      wx.Point(10, 5))
@@ -90,7 +92,7 @@ class LoginDialog(wx.Dialog):
         wx.Button(self, wx.ID_CANCEL, ' Cancel ', wx.Point(135, 90), wx.DefaultSize)
 
     def GetUser(self):
-        val = self.ShowModal()
+        val = self.ShowModal()        
         if val == wx.ID_OK:
             username = self.nameBox.GetValue()
             # h = sha.new(self.passwordBox.GetValue())
