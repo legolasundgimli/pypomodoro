@@ -6,8 +6,6 @@ Created on Jan 24, 2010
 import gdata.calendar
 from gdata.calendar.service import CalendarService
 from gdata.calendar import CalendarEventEntry
-from threading import Thread
-import thread
 import time
 
 import atom
@@ -40,24 +38,32 @@ class EntryManager(gdata.calendar.CalendarEventEntry):
         
         self.when.append(gdata.calendar.When(start_time=start_strtime, end_time=end_strtime))
         
-        if self.calendar_service != None:        
-            new_event = self.calendar_service.InsertEvent(self, '/calendar/feeds/default/private/full')
-            return new_event
+        if self.calendar_service != None:
+            try:        
+                new_event = self.calendar_service.InsertEvent(self, '/calendar/feeds/default/private/full')            
+                return new_event
+            except:
+                return None
+        
         else:
             return None
         
-class PostTask(Thread):
+class PostTask():
     
-    def __init__(self, user):
-        self.user=user        
-                    
-    def run(self, tasklist):
-        self.entry_manager=EntryManager(self.user[0], self.user[1])
-        i=0        
-        for item in tasklist:
-            if(item.ended() and not item.sent):
-                event=self.entry_manager.insert_single_event(item.name, item._startAt.timetuple(), item._stopAt.timetuple())
-                if event != None:
-                    item.sent=True
-                    i+=1
+    def __init__(self, user, tasklist):        
+        self.user=user
+        self.tasklist=tasklist
+        
+                                    
+    def send(self):
+        i=0
+        self.entry_manager=EntryManager(self.user[0], self.user[1])        
+        for item in self.tasklist:
+            event=self.entry_manager.insert_single_event(item.name, item._startAt.timetuple(), item._stopAt.timetuple())
+            if event != None:
+                item.sent=True
+                i+=1
+            else:                 
+                return 0
+            
         return i
