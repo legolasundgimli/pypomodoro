@@ -171,11 +171,12 @@ class Tomato(wx.Frame):
             user = dlg.GetUser()        
             if user != None:
                 post=PostTask(user, tasks)
-                i=post.send()
+                i=post.send() 
                 settings.google_calendar_account=user[0]
                 if i!=len(tasks):
                     self.SetStatusText(messages.ERROR_SENFING_TASK)
-                self.SetStatusText(messages.TASK_SENT %i)
+                else:
+                    self.SetStatusText(messages.TASK_SENT %i)
         else:
             self.SetStatusText(messages.TASK_NONE)
     
