@@ -10,6 +10,9 @@ TASK_TOBE_DONE='Task to be done'
 TASK_INTERRUPTED='Task Interrupted'
 TASK_INPROGRESS='Task in Progress %d:%d'
 TASK_COMPLETED='Task Completed'
+TASK_SENDING='Sending tasks %d'
+TASK_SENT='Sent %d tasks'
+TASK_NONE='No task to send'
 
 MENU_MENU="&Menu"
 MENU_MENU_RESET='&Reset'
@@ -44,3 +47,8 @@ DLG_TASK_GRID_TASK_RUNNING = 'Running'
 
 #################################
 DLG_TASK_WIN_CLOSE='Tasks are not saved. Are you sure you want to exit?'
+
+
+#################################
+
+ERROR_SENFING_TASK='Error in sending tasks. Try again'
