@@ -47,3 +47,7 @@ DLG_TASK_GRID_TASK_RUNNING = 'Running'
 
 #################################
 DLG_TASK_WIN_CLOSE='Tasks are not saved. Are you sure you want to exit?'
+
+#################################
+
+ERROR_SENFING_TASK='Error in sending tasks. Try again'
