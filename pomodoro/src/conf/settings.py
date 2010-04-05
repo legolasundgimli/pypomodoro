@@ -5,7 +5,7 @@ Created on Dec 11, 2009
 '''
 
 # Minutes
-MAX_TIME=1
+MAX_TIME=25
 
 ICON='ico.ico'
 
