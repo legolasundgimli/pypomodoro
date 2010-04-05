@@ -3,6 +3,7 @@ Created on Dec 10, 2009
 
 @author: uolter
 '''
+from google.calendar import PostTask
 
 import wx
 import img
@@ -19,7 +20,7 @@ ID_EXIT=102
 ID_NEW_TASK=201
 ID_VIEW_TASK=202
 ID_SAVE_TASK=203
-ID_SEND_TASKS=204
+ID_SEND_TASK=204
 
 class Tomato(wx.Frame):
     
@@ -74,9 +75,9 @@ class Tomato(wx.Frame):
         self.__menu__()  
         
         # Task list:
-        self.tasklist=task.MyTaskList()
+        self.tasklist=task.MyTaskList()                             
         self.tosave=False
-                      
+        self.username=settings.google_calendar_account                                   
         self.Show(True)
 
     def OnOk(self, event):
@@ -160,7 +161,25 @@ class Tomato(wx.Frame):
                 self.tosave=False            
             # Destroy the dialog
             dialog.Destroy()
-            
+    
+    def OnSent(self, event):
+        tasks=self.tasklist.task_to_send()
+        
+        if len(tasks)>0: 
+            self.SetStatusText(messages.TASK_SENDING %len(tasks))
+            dlg=dialog.LoginDialog(self)
+            user = dlg.GetUser()        
+            if user != None:
+                post=PostTask(user, tasks)
+                i=post.send() 
+                settings.google_calendar_account=user[0]
+                if i!=len(tasks):
+                    self.SetStatusText(messages.ERROR_SENDING_TASK)
+                else:
+                    self.SetStatusText(messages.TASK_SENT %i)
+        else:
+            self.SetStatusText(messages.TASK_NONE)
+    
         
     def __menu__(self):                    
         # Menu
@@ -176,7 +195,7 @@ class Tomato(wx.Frame):
         taskmenu.Append(ID_NEW_TASK, messages.MENU_TASK_RENAME, messages.MENU_TASK_RENAME_MSG)
         taskmenu.Append(ID_VIEW_TASK, messages.MENU_TASK_VIEW, messages.MENU_TASK_VIEW_MSG )
         taskmenu.Append(ID_SAVE_TASK, messages.MENU_TASK_SAVE, messages.MENU_TASK_SAVE_MSG)
-        taskmenu.Append(ID_SEND_TASKS, messages.MENU_TASK_SEND, messages.MENU_TASK_SEND_MSG )        
+        taskmenu.Append(ID_SEND_TASK, messages.MENU_TASK_SEND, messages.MENU_TASK_SEND_MSG )        
         menuBar.Append(taskmenu,messages.MENU_TASK)
         
         self.SetMenuBar(menuBar)  # Adding the MenuBar to the Frame content.        
@@ -186,3 +205,4 @@ class Tomato(wx.Frame):
         wx.EVT_MENU(self, ID_NEW_TASK, self.OnTextEntry)
         wx.EVT_MENU(self, ID_VIEW_TASK, self.OnShowTaskDialog)
         wx.EVT_MENU(self, ID_SAVE_TASK, self.OnSave)
+        wx.EVT_MENU(self, ID_SEND_TASK, self.OnSent)
