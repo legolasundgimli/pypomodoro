@@ -192,7 +192,7 @@ class Tomato(wx.Frame):
         
         # Task
         taskmenu=wx.Menu()
-        taskmenu.Append(ID_NEW_TASK, messages.MENU_TASK_RENAME, messages.MENU_TASK_RENAME_MSG)
+        # taskmenu.Append(ID_NEW_TASK, messages.MENU_TASK_RENAME, messages.MENU_TASK_RENAME_MSG)
         taskmenu.Append(ID_VIEW_TASK, messages.MENU_TASK_VIEW, messages.MENU_TASK_VIEW_MSG )
         taskmenu.Append(ID_SAVE_TASK, messages.MENU_TASK_SAVE, messages.MENU_TASK_SAVE_MSG)
         taskmenu.Append(ID_SEND_TASK, messages.MENU_TASK_SEND, messages.MENU_TASK_SEND_MSG )        
@@ -206,3 +206,4 @@ class Tomato(wx.Frame):
         wx.EVT_MENU(self, ID_VIEW_TASK, self.OnShowTaskDialog)
         wx.EVT_MENU(self, ID_SAVE_TASK, self.OnSave)
         wx.EVT_MENU(self, ID_SEND_TASK, self.OnSent)
+

@@ -20,8 +20,6 @@ class TaskDialog(wx.Dialog):
         self.grid = wx.grid.Grid(self, -1, size=(1, 1))
         self.button = wx.Button(self, wx.ID_CANCEL, messages.DLG_TASK_BTN_CLOSE)
         
-
-
         self.__set_properties()
         self.__do_layout()
         if self.tasklist != None:
@@ -41,11 +39,24 @@ class TaskDialog(wx.Dialog):
         self.grid.SetColLabelValue(2, messages.DLG_TASK_GRID_COL2)
         self.grid.SetColSize(2, 80)
         self.grid.Bind(wx.grid.EVT_GRID_SELECT_CELL, self.onCellSelected)
+        #self.grid.Bind(wx.grid.EVT_GRID_EDITOR_CREATED, self.OnGridEditorCreated)
+        #self.grid.Bind(wx.grid.EVT_GRID_EDITOR_SHOWN, self.EditorShown)
+        #self.grid.Bind(wx.grid.EVT_GRID_EDITOR_HIDDEN, self.EditorHidden)
+        self.Bind(wx.grid.EVT_GRID_CELL_CHANGE, self.SetCellValue)
         
         # end wxGlade
         
     def onCellSelected(self, event):
-        pass
+        if event.GetCol() > 0:
+            pass
+    
+                
+    def SetCellValue(self, event):
+        row,col = event.GetRow(),event.GetCol()                
+        value = self.grid.GetCellValue(row, col)
+        if self.tasklist!=None:
+            item=self.tasklist[col]
+            item.name=value
 
     def __do_layout(self):
         # begin wxGlade: TaskDialog.__do_layout
@@ -110,3 +121,4 @@ if __name__ == "__main__":
     app.SetTopWindow(taskDialog)
     taskDialog.Show()
     app.MainLoop()
+
