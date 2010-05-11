@@ -21,8 +21,8 @@ MENU_MENU_EXIT='E&xit'
 MENU_MENU_EXIT_MSG="Exit Tomato"
 
 MENU_TASK="&Task"
-MENU_TASK_RENAME='&Rename'
-MENU_TASK_RENAME_MSG='Rename Currnet Task' 
+#MENU_TASK_RENAME='&Rename'
+#MENU_TASK_RENAME_MSG='Rename Currnet Task' 
 MENU_TASK_VIEW='&View'
 MENU_TASK_VIEW_MSG='View All tasks'
 MENU_TASK_SAVE='&Save'
@@ -51,3 +51,4 @@ DLG_TASK_WIN_CLOSE='Tasks are not saved. Are you sure you want to exit?'
 #################################
 
 ERROR_SENDING_TASK='Error in sending tasks. Try again'
+
