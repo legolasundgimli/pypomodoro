@@ -184,8 +184,9 @@ class Tomato(wx.Frame):
     def __menu__(self):                    
         # Menu
         resetmenu= wx.Menu()
-        resetmenu.Append(ID_RESET, messages.MENU_MENU_RESET, messages.MENU_MENU_RESET_MSG)                    
-        resetmenu.Append(ID_EXIT, messages.MENU_MENU_EXIT, messages.MENU_MENU_EXIT_MSG)
+        resetmenu.Append(ID_RESET, messages.MENU_MENU_RESET, messages.MENU_MENU_RESET_MSG)
+        resetmenu.Append(ID_SAVE_TASK, messages.MENU_TASK_SAVE, messages.MENU_TASK_SAVE_MSG)                    
+        resetmenu.Append(ID_EXIT, messages.MENU_MENU_EXIT, messages.MENU_MENU_EXIT_MSG)        
         # Creating the menubar.
         menuBar = wx.MenuBar()
         menuBar.Append(resetmenu,messages.MENU_MENU) # Adding the "resetmenu" to the MenuBar
@@ -193,8 +194,7 @@ class Tomato(wx.Frame):
         # Task
         taskmenu=wx.Menu()
         # taskmenu.Append(ID_NEW_TASK, messages.MENU_TASK_RENAME, messages.MENU_TASK_RENAME_MSG)
-        taskmenu.Append(ID_VIEW_TASK, messages.MENU_TASK_VIEW, messages.MENU_TASK_VIEW_MSG )
-        taskmenu.Append(ID_SAVE_TASK, messages.MENU_TASK_SAVE, messages.MENU_TASK_SAVE_MSG)
+        taskmenu.Append(ID_VIEW_TASK, messages.MENU_TASK_VIEW, messages.MENU_TASK_VIEW_MSG )        
         taskmenu.Append(ID_SEND_TASK, messages.MENU_TASK_SEND, messages.MENU_TASK_SEND_MSG )        
         menuBar.Append(taskmenu,messages.MENU_TASK)
         
