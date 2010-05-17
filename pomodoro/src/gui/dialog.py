@@ -51,7 +51,7 @@ class TaskDialog(wx.Dialog):
     def SetCellValue(self, event):
         row,col = event.GetRow(),event.GetCol()                
         value = self.grid.GetCellValue(row, col)
-        if self.tasklist!=None:
+        if self.tasklist!=None and len(self.tasklist)>0:
             item=self.tasklist[col]
             item.name=value
     
