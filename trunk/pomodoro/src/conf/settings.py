@@ -12,3 +12,7 @@ ICON='ico.ico'
 CSV_SEPARATOR=','
 
 google_calendar_account=''
+
+COUNTER_FILE_NAME='.pyPomodoro'
+
+
