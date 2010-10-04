@@ -52,3 +52,5 @@ DLG_TASK_WIN_CLOSE='Tasks are not saved. Are you sure you want to exit?'
 
 ERROR_SENDING_TASK='Error in sending tasks. Try again'
 
+MSG_STAUTS_NR_TASK="%s task(s) so far."
+
