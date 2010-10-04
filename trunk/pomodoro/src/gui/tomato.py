@@ -3,7 +3,6 @@ Created on Dec 10, 2009
 
 @author: uolter
 '''
-from google.calendar import PostTask
 
 import wx
 import img
@@ -25,6 +24,8 @@ ID_SEND_TASK=204
 class Tomato(wx.Frame):
     
     def __init__(self, parent, id, title):
+        
+        from google.calendar import PostTask
         
         self.maxtime=settings.MAX_TIME*60
         self.count = 0
@@ -77,8 +78,12 @@ class Tomato(wx.Frame):
         # Task list:
         self.tasklist=task.MyTaskList()                             
         self.tosave=False
-        self.username=settings.google_calendar_account                                   
+        self.username=settings.google_calendar_account                                           
         self.Show(True)
+        
+        # Counter 
+        self.counter=task.Counter()
+        self.SetStatusText(messages.MSG_STAUTS_NR_TASK %self.counter.value)
 
     def OnOk(self, event):
         if self.count >= self.maxtime:
@@ -115,6 +120,10 @@ class Tomato(wx.Frame):
             wx.Bell()
             wx.Bell()
             wx.Bell()
+            # add new a pomodoro to the counter and save it.
+            self.counter.value=self.counter.value+1            
+            self.counter.save_number(self.counter.value)
+            self.SetStatusText(messages.MSG_STAUTS_NR_TASK %self.counter.value)
             
     def OnReset(self, event):
         self.count=0
@@ -163,6 +172,9 @@ class Tomato(wx.Frame):
             dialog.Destroy()
     
     def OnSent(self, event):
+        
+        from google.calendar import PostTask
+        
         tasks=self.tasklist.task_to_send()
         
         if len(tasks)>0: 
