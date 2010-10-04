@@ -16,16 +16,16 @@ class MyTask():
     
     def __init__(self, name=''):
         self.name=name
-        self._startAt=datetime.datetime.utcnow()                
+        self._startAt=datetime.datetime.now()                
         self._stopAt=None
         self.sent=False        
         
     def restart(self):        
-        self._startAt=datetime.datetime.utcnow()
+        self._startAt=datetime.datetime.now()
         return self._startAt
     
     def stop(self):
-        self._stopAt=datetime.datetime.utcnow()
+        self._stopAt=datetime.datetime.now()
         return self._stopAt
         
     def startAt(self):
@@ -95,3 +95,34 @@ def csvTaskFormatter( _task):
             ret+='\n'                            
     return ret
     
+
+class Counter():
+    
+    def __init__(self):
+        self.file_name=settings.COUNTER_FILE_NAME
+        self.value=self.get_number()
+        
+        
+    def __open(self):
+        try:
+            file = open(self.file_name, 'r')
+            self.counter=file.readline()            
+            file.close()
+        except IOError:
+            self.counter=0
+        
+    def get_number(self):
+        self.__open()
+        if self.counter and self.counter!='':
+            return int(self.counter)
+        else:
+            return 0
+    
+    def save_number(self, number=0):
+        file = open(self.file_name, 'w')
+        file.write(str(number))
+        file.close()
+        
+        
+        
+        
