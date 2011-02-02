@@ -32,8 +32,8 @@ class EntryManager(gdata.calendar.CalendarEventEntry):
     def insert_single_event(self, title, start_time=None, end_time=None):        
         self.title = atom.Title(text=title)
         
-        start_strtime=time.strftime('%Y-%m-%dT%H:%M:%S.000Z', start_time)
-        end_strtime=time.strftime('%Y-%m-%dT%H:%M:%S.000Z', end_time)
+        start_strtime=time.strftime('%Y-%m-%dT%H:%M:%S.000Z', start_time.gmtime())
+        end_strtime=time.strftime('%Y-%m-%dT%H:%M:%S.000Z', end_time.gmtime())
         
         
         self.when.append(gdata.calendar.When(start_time=start_strtime, end_time=end_strtime))
