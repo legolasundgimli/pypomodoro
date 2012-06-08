@@ -25,8 +25,6 @@ class Tomato(wx.Frame):
     
     def __init__(self, parent, id, title):
         
-        from google.calendar import PostTask
-        
         self.maxtime=settings.MAX_TIME*60
         self.count = 0
         self.taskname=''
